@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+/* Desktop cinematic mode: large screens with motion allowed. Layout and GSAP both key off this query. */
+@custom-variant cinematic (@media (min-width: 1024px) and (min-height: 640px) and (prefers-reduced-motion: no-preference));
+@custom-variant flat (@media not all and (min-width: 1024px) and (min-height: 640px) and (prefers-reduced-motion: no-preference));
+@custom-variant pinmode (@media (min-width: 768px) and (min-height: 600px) and (prefers-reduced-motion: no-preference));
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-archivo), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-sans);
+
+  /* Night palette: deep navy ground, cool light text, teal + violet + pink glows */
+  --color-ivory: #080a10;      /* page background */
+  --color-paper: #10141d;      /* raised surface */
+  --color-ink: #eceff5;        /* primary text */
+  --color-ink-soft: #b3b9c6;
+  --color-ink-muted: #8b92a3;
+  --color-line: rgba(255, 255, 255, 0.09);
+  --color-sky: #0f2229;
+  --color-sky-deep: #3ee6d8;   /* teal accent */
+  --color-lavender: #1b1631;
+  --color-lavender-deep: #a78bfa;
+  --color-blush: #2a1420;
+  --color-blush-deep: #ff6fb5;
+  --color-gold: #f2b230;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  color-scheme: dark;
+  --nav-h: 72px;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-ivory);
+  color: var(--color-ink);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+section[id],
+[data-anchor] {
+  scroll-margin-top: calc(var(--nav-h) - 8px);
+}
+
+::selection {
+  background: rgba(62, 230, 216, 0.3);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-sky-deep);
+  outline-offset: 3px;
+}
+
+/* ---------- Typography ---------- */
+.display {
+  font-family: var(--font-display);
+  font-stretch: 112%;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-sky-deep);
+}
+.label-caps {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.text-gradient {
+  background: linear-gradient(90deg, #3ee6d8 0%, #a78bfa 50%, #ff6fb5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Surfaces ---------- */
+.glass {
+  background: rgba(16, 20, 29, 0.62);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.glass-strong {
+  background: rgba(16, 20, 29, 0.78);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.6);
+}
+.tile {
+  background: var(--color-paper);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+}
+/* Dashed frame with solid corner brackets */
+.bracket {
+  --bc: rgba(255, 255, 255, 0.92);
+  --bl: 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.24);
+  background:
+    linear-gradient(var(--bc), var(--bc)) top left / var(--bl) 2px no-repeat,
+    linear-gradient(var(--bc), var(--bc)) top left / 2px var(--bl) no-repeat,
+    linear-gradient(var(--bc), var(--bc)) top right / var(--bl) 2px no-repeat,
+    linear-gradient(var(--bc), var(--bc)) top right / 2px var(--bl) no-repeat,
+    linear-gradient(var(--bc), var(--bc)) bottom left / var(--bl) 2px no-repeat,
+    linear-gradient(var(--bc), var(--bc)) bottom left / 2px var(--bl) no-repeat,
+    linear-gradient(var(--bc), var(--bc)) bottom right / var(--bl) 2px no-repeat,
+    linear-gradient(var(--bc), var(--bc)) bottom right / 2px var(--bl) no-repeat;
+}
+
+/* ---------- Ambient float loops (decorative only) ---------- */
+@keyframes float-a {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -10px, 0); }
+}
+@keyframes float-b {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(4px, 8px, 0); }
+}
+@keyframes drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(3%, -4%, 0) scale(1.06); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+.float-a { animation: float-a 6s ease-in-out infinite; }
+.float-b { animation: float-b 7.5s ease-in-out infinite; }
+.drift { animation: drift 26s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .float-a, .float-b, .drift { animation: none !important; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+  }
+  .rm-fade { animation: rm-fade 0.5s ease-out both; }
+}
+@keyframes rm-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------- Horizontal snap row (mobile / reduced motion projects) ---------- */
+.snap-row {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.snap-row::-webkit-scrollbar { display: none; }
+
+/* Grain overlay to keep gradients from banding */
+.grain { position: relative; }
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Pre-hydration state for the hero entrance (only when JS runs and motion is allowed) */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-hero-in],
+  .js [data-stat] { opacity: 0; }
+}
+
+@keyframes cue {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+/* Opening screen: only shown when the inline script in layout.tsx marks this visit (and JS runs). */
+[data-intro-screen] { display: none !important; }
+.intro-active [data-intro-screen] { display: flex !important; }
+.intro-active body { overflow: hidden; }
